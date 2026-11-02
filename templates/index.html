@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <!-- Icon sprite, referenced with <use href="#icon-..."> -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="icon-library" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 6 4 14"/><path d="M12 6v14"/><path d="M8 8v12"/><path d="M4 4v16"/></symbol>
+    <symbol id="icon-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></symbol>
+    <symbol id="icon-disc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M6 12c0-1.7.7-3.2 1.8-4.2"/><circle cx="12" cy="12" r="2"/><path d="M18 12c0 1.7-.7 3.2-1.8 4.2"/></symbol>
+    <symbol id="icon-pages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/></symbol>
+    <symbol id="icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+    <symbol id="icon-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></symbol>
+    <symbol id="icon-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M10 11v6"/><path d="M14 11v6"/></symbol>
+    <symbol id="icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></symbol>
+    <symbol id="icon-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+    <symbol id="icon-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></symbol>
+  </svg>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-logo"><svg><use href="#icon-library"/></svg></span>
+        <span class="brand-name">Library</span>
+        <span class="chip">Personal collection</span>
+      </div>
+      <div class="topbar-right">
+        <span class="tagline">Your stories, organized.</span>
+        <span class="avatar">JD</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="page-head">
+      <div>
+        <h1>My library</h1>
+        <p class="subtitle">A little order for everything you love to read and watch.</p>
+      </div>
+      <button type="button" class="btn btn-primary" data-action="add">
+        <svg class="icon"><use href="#icon-plus"/></svg> Add Item
+      </button>
+    </div>
+
+    <section class="toolbar">
+      <label class="switch">
+        <input type="checkbox" id="available-only">
+        <span class="switch-track"></span>
+        <span>Available only</span>
+      </label>
+      <div class="segmented" role="group" aria-label="Filter by type">
+        <button type="button" class="active" data-type="">All</button>
+        <button type="button" data-type="book">Book</button>
+        <button type="button" data-type="dvd">DVD</button>
+      </div>
+      <span class="muted" id="item-count"></span>
+    </section>
+
+    <div class="alert" id="error" role="alert" hidden>
+      <svg class="icon"><use href="#icon-alert"/></svg>
+      <span class="alert-message"></span>
+      <button type="button" class="alert-close" aria-label="Close"><svg class="icon"><use href="#icon-x"/></svg></button>
+    </div>
+
+    <div class="alert alert-success" id="success" role="status" hidden>
+      <svg class="icon"><use href="#icon-check"/></svg>
+      <span class="alert-message"></span>
+      <button type="button" class="alert-close" aria-label="Close"><svg class="icon"><use href="#icon-x"/></svg></button>
+    </div>
+
+    <div id="list-section" hidden>
+      <div class="list-head">
+        <h2 id="list-title">All items</h2>
+        <span class="muted" id="status-summary"><span class="dot dot-green"></span><span id="available-count"></span> · <span id="checked-out-count"></span></span>
+      </div>
+      <div class="grid" id="grid"></div>
+      <p class="footer-note"><svg class="icon"><use href="#icon-check"/></svg> <span id="footer-text"></span></p>
+    </div>
+
+    <section class="empty" id="empty" hidden>
+      <span class="empty-icon"><svg><use href="#icon-library"/></svg></span>
+      <h2 id="empty-title">No items yet</h2>
+      <p id="empty-text">Good stories deserve a place. Add your first book or DVD to start building your library.</p>
+      <button type="button" class="btn btn-primary" data-action="add">
+        <svg class="icon"><use href="#icon-plus"/></svg> Add Item
+      </button>
+    </section>
+  </main>
+
+  <template id="card-template">
+    <article class="card">
+      <div class="card-top">
+        <span class="card-icon"><svg><use/></svg></span>
+        <span class="chip type-badge"></span>
+      </div>
+      <h3 class="card-title"></h3>
+      <p class="card-author"></p>
+      <p class="card-meta"><svg class="icon"><use/></svg> <span></span></p>
+      <span class="status"></span>
+      <div class="card-actions">
+        <button type="button" class="btn toggle-btn"></button>
+        <button type="button" class="icon-btn edit-btn" aria-label="Edit"><svg class="icon"><use href="#icon-edit"/></svg></button>
+        <button type="button" class="icon-btn delete-btn" aria-label="Delete"><svg class="icon"><use href="#icon-trash"/></svg></button>
+      </div>
+    </article>
+  </template>
+
+  <div class="modal-backdrop" id="modal" hidden>
+    <form class="modal" id="item-form" novalidate>
+      <div class="modal-body">
+        <div class="modal-head">
+          <div>
+            <p class="eyebrow"><svg class="icon"><use id="modal-eyebrow-icon" href="#icon-book"/></svg> <span id="modal-eyebrow">Book details</span></p>
+            <h2 id="modal-title">Add Item</h2>
+            <p class="subtitle">Keep the details of your collection in one place.</p>
+          </div>
+          <button type="button" class="icon-btn close-btn" data-action="close" aria-label="Close"><svg class="icon"><use href="#icon-x"/></svg></button>
+        </div>
+
+        <div class="alert" id="form-error" role="alert" hidden>
+          <svg class="icon"><use href="#icon-alert"/></svg>
+          <span class="alert-message"></span>
+          <button type="button" class="alert-close" aria-label="Close"><svg class="icon"><use href="#icon-x"/></svg></button>
+        </div>
+
+        <label class="field">
+          <span>Title</span>
+          <input type="text" name="title" id="field-title">
+        </label>
+        <label class="field">
+          <span>Author/Director</span>
+          <input type="text" name="author" id="field-author">
+        </label>
+        <label class="field">
+          <span>Media Type</span>
+          <select name="type" id="field-type">
+            <option value="book">Book</option>
+            <option value="dvd">DVD</option>
+          </select>
+        </label>
+        <label class="field">
+          <span id="number-label">Page count</span>
+          <input type="number" name="number" id="field-number">
+          <small class="hint" id="number-hint">Enter the total number of pages.</small>
+        </label>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn btn-secondary" data-action="close">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Item</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
